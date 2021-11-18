@@ -1,4 +1,6 @@
 const INVALID_DATA = 'invalid_data';
+const NOT_FOUND = 'not_found';
+
 const shortNameError = { err: {
   status: 422,
   code: INVALID_DATA,
@@ -38,6 +40,12 @@ const invalidIdOrQuantityError = { err: {
   message: 'Wrong product ID or invalid quantity',
 } };
 
+const saleNotFoundError = { err: {
+  status: 404,
+  code: NOT_FOUND,
+  message: 'Sale not found',
+} };
+
 const checkRequiredData = (name, quantity) => {
   if (name === undefined || quantity === undefined) return false;
   return true;
@@ -65,4 +73,5 @@ module.exports = {
   productAlreadyExistsError,
   invalidIdOrQuantityError,
   validateSalesBody,
+  saleNotFoundError,
 };

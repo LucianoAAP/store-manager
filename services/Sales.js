@@ -1,6 +1,14 @@
 const Sales = require('../models/Sales');
 const Products = require('../models/Products');
-const { invalidIdOrQuantityError } = require('../utils/bodyValidation');
+const { invalidIdOrQuantityError, saleNotFoundError } = require('../utils/bodyValidation');
+
+const getAll = async () => Sales.getAll();
+
+const getById = async (id) => {
+  const sale = await Sales.getById(id);
+  if (!sale) return saleNotFoundError;
+  return sale;
+};
 
 const create = async (list) => {
   list.forEach(async ({ productId }) => {
@@ -13,5 +21,7 @@ const create = async (list) => {
 };
 
 module.exports = {
+  getAll,
   create,
+  getById,
 };
