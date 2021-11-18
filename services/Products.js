@@ -22,9 +22,16 @@ const update = async (id, name, quantity) => {
   return Products.update(id, name, quantity);
 };
 
+const erase = async (id) => {
+  const product = await getById(id);
+  if (product.err) return product;
+  return Products.erase(id);
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  erase,
 };

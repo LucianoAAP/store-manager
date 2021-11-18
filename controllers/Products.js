@@ -71,4 +71,11 @@ router.put('/:id', rescue(async (req, res, next) => {
   return res.status(200).json(product);
 }));
 
+router.delete('/:id', rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await Products.erase(id);
+  if (product.err) return next(product.err);
+  return res.status(200).json(product);
+}));
+
 module.exports = router;
