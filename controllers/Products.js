@@ -36,9 +36,21 @@ const validate = (name, quantity) => {
   if (!requiredData) return missingDataError;
   if (name.length < 5) return shortNameError;
   if (quantity <= 0) return quantityLessThan1Error;
-  if (typeof quantity !== 'number') return quantityNotANumberError;
+  if (Number.isNaN(parseInt(quantity, 10))) return quantityNotANumberError;
   return 'OK';
 };
+
+router.get('/', rescue(async (_req, res) => {
+  const products = await Products.getAll();
+  res.status(200).json({ products });
+}));
+
+router.get('/:id', rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await Products.getById(id);
+  if (product.err) return next(product.err);
+  return res.status(200).json(product);
+}));
 
 router.post('/', rescue(async (req, res, next) => {
   const { name, quantity } = req.body;
