@@ -11,6 +11,8 @@ app.get('/', (_request, response) => {
 
 app.use('/products', require('./controllers/Products'));
 
+app.use('/sales', require('./controllers/Sales'));
+
 app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 3000;
