@@ -46,6 +46,12 @@ const saleNotFoundError = { err: {
   message: 'Sale not found',
 } };
 
+const wrongSaleIdError = { err: {
+  status: 422,
+  code: INVALID_DATA,
+  message: 'Wrong sale ID format',
+} };
+
 const checkRequiredData = (name, quantity) => {
   if (name === undefined || quantity === undefined) return false;
   return true;
@@ -74,4 +80,5 @@ module.exports = {
   invalidIdOrQuantityError,
   validateSalesQuantity,
   saleNotFoundError,
+  wrongSaleIdError,
 };

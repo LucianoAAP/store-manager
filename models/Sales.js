@@ -23,9 +23,16 @@ const update = async (id, list) => {
   return getById(id);
 };
 
+const erase = async (id) => {
+  const sale = await getById(id);
+  await connection().then((db) => db.collection('sales').deleteOne({ _id: ObjectId(id) }));
+  return sale;
+};
+
 module.exports = {
   getAll,
   create,
   getById,
   update,
+  erase,
 };

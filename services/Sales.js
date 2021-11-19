@@ -1,6 +1,10 @@
 const Sales = require('../models/Sales');
 const Products = require('../models/Products');
-const { invalidIdOrQuantityError, saleNotFoundError } = require('../utils/bodyValidation');
+const {
+  invalidIdOrQuantityError,
+  saleNotFoundError,
+  wrongSaleIdError,
+} = require('../utils/bodyValidation');
 
 const getAll = async () => Sales.getAll();
 
@@ -26,9 +30,16 @@ const update = async (id, list) => {
   return Sales.update(id, list);
 };
 
+const erase = async (id) => {
+  const sale = await getById(id);
+  if (sale.err) return wrongSaleIdError;
+  return Sales.erase(id);
+};
+
 module.exports = {
   getAll,
   create,
   getById,
   update,
+  erase,
 };

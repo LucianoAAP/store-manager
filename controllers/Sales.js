@@ -40,4 +40,11 @@ router.put('/:id', rescue(async (req, res, next) => {
   return res.status(200).json(sale);
 }));
 
+router.delete('/:id', rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const sale = await Sales.erase(id);
+  if (sale.err) return next(sale.err);
+  return res.status(200).json(sale);
+}));
+
 module.exports = router;
