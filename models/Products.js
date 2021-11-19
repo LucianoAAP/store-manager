@@ -34,10 +34,19 @@ const erase = async (id) => {
   return product;
 };
 
+const filterByIds = async (list) => {
+  const ids = list.map((id) => ObjectId(id));
+  const products = await connection()
+    .then((db) => db.collection('products').find({ _id: { $in: ids } }).toArray())
+    .then((items) => items.map(({ _id, quantity }) => ({ id: _id.toString(), quantity })));
+  return products;
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   erase,
+  filterByIds,
 };

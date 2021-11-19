@@ -1,7 +1,7 @@
 const express = require('express');
 const rescue = require('express-rescue');
 const Products = require('../services/Products');
-const { validateProductsBody } = require('../utils/bodyValidation');
+const { validateProductsBody } = require('../utils/validations');
 
 const router = express.Router();
 

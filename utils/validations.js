@@ -1,5 +1,6 @@
 const INVALID_DATA = 'invalid_data';
 const NOT_FOUND = 'not_found';
+const STOCK_PROBLEM = 'stock_problem';
 
 const shortNameError = { err: {
   status: 422,
@@ -52,6 +53,12 @@ const wrongSaleIdError = { err: {
   message: 'Wrong sale ID format',
 } };
 
+const notAllowedAmmountError = { err: {
+  status: 404,
+  code: STOCK_PROBLEM,
+  message: 'Such amount is not permitted to sell',
+} };
+
 const checkRequiredData = (name, quantity) => {
   if (name === undefined || quantity === undefined) return false;
   return true;
@@ -81,4 +88,5 @@ module.exports = {
   validateSalesQuantity,
   saleNotFoundError,
   wrongSaleIdError,
+  notAllowedAmmountError,
 };

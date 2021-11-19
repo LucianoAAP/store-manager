@@ -1,7 +1,7 @@
 const express = require('express');
 const rescue = require('express-rescue');
 const Sales = require('../services/Sales');
-const { validateSalesQuantity } = require('../utils/bodyValidation');
+const { validateSalesQuantity } = require('../utils/validations');
 
 const router = express.Router();
 
@@ -19,8 +19,8 @@ router.get('/:id', rescue(async (req, res, next) => {
 
 router.post('/', rescue(async (req, res, next) => {
   const list = req.body;
-  list.forEach(({ quantity }) => {
-    const validity = validateSalesQuantity(quantity);
+  list.forEach((product) => {
+    const validity = validateSalesQuantity(product.quantity);
     if (validity.err) return next(validity.err);
   });
   const sale = await Sales.create(list);
@@ -31,8 +31,8 @@ router.post('/', rescue(async (req, res, next) => {
 router.put('/:id', rescue(async (req, res, next) => {
   const { id } = req.params;
   const list = req.body;
-  list.forEach(({ quantity }) => {
-    const validity = validateSalesQuantity(quantity);
+  list.forEach((product) => {
+    const validity = validateSalesQuantity(product.quantity);
     if (validity.err) return next(validity.err);
   });
   const sale = await Sales.update(id, list);

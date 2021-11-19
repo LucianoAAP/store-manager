@@ -1,5 +1,5 @@
 const Products = require('../models/Products');
-const { wrongIdError, productAlreadyExistsError } = require('../utils/bodyValidation');
+const { wrongIdError, productAlreadyExistsError } = require('../utils/validations');
 
 const getAll = async () => Products.getAll();
 
