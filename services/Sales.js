@@ -20,7 +20,7 @@ const validateSale = async (list) => {
   const stock = await Products.filterByIds(validProducts);
   const newStock = stock.map((product) => {
     const { id, quantity } = product;
-    const { productId, quantity: soldQuantity } = list.filter((item) => item.productId === id)[0];
+    const { productId, quantity: soldQuantity } = list.find((item) => item.productId === id);
     const newQuantity = quantity - soldQuantity;
     return { productId, quantity: newQuantity };
   });
