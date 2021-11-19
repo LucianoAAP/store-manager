@@ -21,6 +21,7 @@ const create = async (list) => {
       return invalidIdOrQuantityError;
     }
   });
+  await Sales.consolidateSale(list);
   return Sales.create(list);
 };
 
@@ -33,6 +34,7 @@ const update = async (id, list) => {
 const erase = async (id) => {
   const sale = await getById(id);
   if (sale.err) return wrongSaleIdError;
+  await Sales.revertSale(id);
   return Sales.erase(id);
 };
 

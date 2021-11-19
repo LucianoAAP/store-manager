@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
+const Products = require('./Products');
 
 const getAll = async () => connection().then((db) => db.collection('sales').find().toArray());
 
@@ -29,10 +30,29 @@ const erase = async (id) => {
   return sale;
 };
 
+const consolidateSale = async (list) => {
+  list.forEach(async ({ productId, quantity: soldQuantity }) => {
+    const { name, quantity } = await Products.getById(productId);
+    const newQuantity = quantity - soldQuantity;
+    await Products.update(productId, name, newQuantity);
+  });
+};
+
+const revertSale = async (id) => {
+  const { itensSold } = await getById(id);
+  itensSold.forEach(async ({ productId, quantity: soldQuantity }) => {
+    const { name, quantity } = await Products.getById(productId);
+    const newQuantity = quantity + soldQuantity;
+    await Products.update(productId, name, newQuantity);
+  });
+};
+
 module.exports = {
   getAll,
   create,
   getById,
   update,
   erase,
+  consolidateSale,
+  revertSale,
 };
