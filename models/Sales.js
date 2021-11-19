@@ -15,8 +15,17 @@ const create = async (list) => (connection().then((db) => db.collection('sales')
     itensSold: list,
   })).then((result) => ({ _id: result.insertedId, itensSold: list })));
 
+const update = async (id, list) => {
+  await connection().then((db) => db.collection('sales').updateOne(
+    { _id: ObjectId(id) },
+    { $set: { itensSold: list } },
+  ));
+  return getById(id);
+};
+
 module.exports = {
   getAll,
   create,
   getById,
+  update,
 };

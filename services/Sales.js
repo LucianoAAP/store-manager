@@ -20,8 +20,15 @@ const create = async (list) => {
   return Sales.create(list);
 };
 
+const update = async (id, list) => {
+  const sale = await getById(id);
+  if (sale.err) return sale;
+  return Sales.update(id, list);
+};
+
 module.exports = {
   getAll,
   create,
   getById,
+  update,
 };

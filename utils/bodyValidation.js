@@ -60,10 +60,10 @@ const validateProductsBody = (name, quantity) => {
   return 'OK';
 };
 
-const validateSalesBody = (quantity) => {
-  if (quantity === undefined) return invalidIdOrQuantityError;
-  if (quantity <= 0) return invalidIdOrQuantityError;
-  if (Number.isNaN(parseInt(quantity, 10))) return invalidIdOrQuantityError;
+const validateSalesQuantity = (quantity) => {
+  if (quantity === undefined || quantity <= 0 || Number.isNaN(parseInt(quantity, 10))) {
+    return invalidIdOrQuantityError;
+  }
   return 'OK';
 };
 
@@ -72,6 +72,6 @@ module.exports = {
   wrongIdError,
   productAlreadyExistsError,
   invalidIdOrQuantityError,
-  validateSalesBody,
+  validateSalesQuantity,
   saleNotFoundError,
 };
