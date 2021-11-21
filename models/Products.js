@@ -41,7 +41,8 @@ const filterByIds = async (list) => {
   const ids = list.map((id) => ObjectId(id));
   const products = await getConnection.connect()
     .then((db) => db.collection('products').find({ _id: { $in: ids } }).toArray())
-    .then((items) => items.map(({ _id, quantity }) => ({ id: _id.toString(), quantity })));
+    .then((items) => items
+      .map(({ _id, name, quantity }) => ({ id: _id.toString(), name, quantity })));
   return products;
 };
 

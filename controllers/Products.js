@@ -19,8 +19,8 @@ router.get('/:id', rescue(async (req, res, next) => {
 
 router.post('/', rescue(async (req, res, next) => {
   const { name, quantity } = req.body;
-  const validity = validateProductsBody(name, quantity);
-  if (validity.err) return next(validity.err);
+  const validation = validateProductsBody(name, quantity);
+  if (validation.err) return next(validation.err);
   const product = await Products.create(name, quantity);
   if (product.err) return next(product.err);
   return res.status(201).json(product);
@@ -29,8 +29,8 @@ router.post('/', rescue(async (req, res, next) => {
 router.put('/:id', rescue(async (req, res, next) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
-  const validity = validateProductsBody(name, quantity);
-  if (validity.err) return next(validity.err);
+  const validation = validateProductsBody(name, quantity);
+  if (validation.err) return next(validation.err);
   const product = await Products.update(id, name, quantity);
   if (product.err) return next(product.err);
   return res.status(200).json(product);

@@ -19,10 +19,9 @@ router.get('/:id', rescue(async (req, res, next) => {
 
 router.post('/', rescue(async (req, res, next) => {
   const list = req.body;
-  list.forEach((product) => {
-    const validity = validateSalesQuantity(product.quantity);
-    if (validity.err) return next(validity.err);
-  });
+  const validationArray = list.map((product) => validateSalesQuantity(product.quantity));
+  const validation = validationArray.find((response) => response.err);
+  if (validation) return next(validation.err);
   const sale = await Sales.create(list);
   if (sale.err) return next(sale.err);
   return res.status(200).json(sale);
@@ -31,10 +30,9 @@ router.post('/', rescue(async (req, res, next) => {
 router.put('/:id', rescue(async (req, res, next) => {
   const { id } = req.params;
   const list = req.body;
-  list.forEach((product) => {
-    const validity = validateSalesQuantity(product.quantity);
-    if (validity.err) return next(validity.err);
-  });
+  const validationArray = list.map((product) => validateSalesQuantity(product.quantity));
+  const validation = validationArray.find((response) => response.err);
+  if (validation) return next(validation.err);
   const sale = await Sales.update(id, list);
   if (sale.err) return next(sale.err);
   return res.status(200).json(sale);

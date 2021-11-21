@@ -178,20 +178,14 @@ describe('Testa service de products', () => {
 });
 
 describe('Testa service de sales', () => {
-  const expectedProduct = {
-    _id: PRODUCT_ID_EXAMPLE,
-    name: 'Martelo de Thor',
-    quantity: 100,
-  };
-
   const expectedSale = {
     _id: SALE_ID_EXAMPLE,
     itensSold: [{ productId: PRODUCT_ID_EXAMPLE, quantity: 2 }],
   };
 
-  const validStock = [{ id: PRODUCT_ID_EXAMPLE, quantity: 100 }];
+  const validStock = [{ id: PRODUCT_ID_EXAMPLE, name: 'Martelo de Thor', quantity: 100 }];
 
-  const invalidStock = [{ id: PRODUCT_ID_EXAMPLE, quantity: 1 }];
+  const invalidStock = [{ id: PRODUCT_ID_EXAMPLE, name: 'Martelo de Thor', quantity: 1 }];
 
   describe('Testa getAll', () => {
     before(async () => {
@@ -243,11 +237,11 @@ describe('Testa service de sales', () => {
   describe('Testa create', () => {
     describe('Quando o produto não existe no estoque', () => {
       before(async () => {
-        sinon.stub(productsModel, 'getById').resolves(null);
+        sinon.stub(productsModel, 'filterByIds').resolves([null]);
       });
       
       after(() => {
-        productsModel.getById.restore();
+        productsModel.filterByIds.restore();
       });
 
       it('Retorna a mensagem de erro correta', async () => {
@@ -258,12 +252,10 @@ describe('Testa service de sales', () => {
 
     describe('Quando não há produtos o suficiente no estoque', () => {
       before(async () => {
-        sinon.stub(productsModel, 'getById').resolves(expectedProduct);
         sinon.stub(productsModel, 'filterByIds').resolves(invalidStock);
       });
       
       after(() => {
-        productsModel.getById.restore();
         productsModel.filterByIds.restore();
       });
 
@@ -275,14 +267,12 @@ describe('Testa service de sales', () => {
 
     describe('Quando a venda é válida', () => {
       before(async () => {
-        sinon.stub(productsModel, 'getById').resolves(expectedProduct);
         sinon.stub(productsModel, 'filterByIds').resolves(validStock);
         sinon.stub(productsModel, 'update').resolves('');
         sinon.stub(salesModel, 'create').resolves(expectedSale);
       });
       
       after(() => {
-        productsModel.getById.restore();
         productsModel.filterByIds.restore();
         productsModel.update.restore();
         salesModel.create.restore();
@@ -298,7 +288,7 @@ describe('Testa service de sales', () => {
   describe('Testa update', () => {
     const newSale = {
       _id: SALE_ID_EXAMPLE,
-      itensSold: [{ productId: PRODUCT_ID_EXAMPLE, quantity: 3 }],
+      itensSold: [{ productId: PRODUCT_ID_EXAMPLE, quantity: 4 }],
     };
 
     describe('Quando a venda não existe', () => {
@@ -317,14 +307,36 @@ describe('Testa service de sales', () => {
       });
     });
 
-    describe('Quando a venda existe', () => {
+    describe('Quando não há estoque o suficiente para a nova venda', () => {
       before(async () => {
         sinon.stub(salesModel, 'getById').resolves(expectedSale);
+        sinon.stub(productsModel, 'filterByIds').resolves(invalidStock);
+      });
+      
+      after(() => {
+        salesModel.getById.restore();
+        productsModel.filterByIds.restore();
+      });
+
+      it('Retorna a mensagem de erro correta', async () => {
+        const { _id, itensSold } = newSale;
+        const sale = await salesService.update(_id, itensSold);
+        expect(sale).to.be.deep.equal(notAllowedAmmountError);
+      });
+    });
+
+    describe('Quando a nova venda é válida', () => {
+      before(async () => {
+        sinon.stub(salesModel, 'getById').resolves(expectedSale);
+        sinon.stub(productsModel, 'filterByIds').resolves(validStock);
+        sinon.stub(productsModel, 'update').resolves('');
         sinon.stub(salesModel, 'update').resolves(newSale);
       });
       
       after(() => {
         salesModel.getById.restore();
+        productsModel.filterByIds.restore();
+        productsModel.update.restore();
         salesModel.update.restore();
       });
 
@@ -355,11 +367,15 @@ describe('Testa service de sales', () => {
     describe('Quando a venda existe', () => {
       before(async () => {
         sinon.stub(salesModel, 'getById').resolves(expectedSale);
+        sinon.stub(productsModel, 'filterByIds').resolves(validStock);
+        sinon.stub(productsModel, 'update').resolves('');
         sinon.stub(salesModel, 'erase').resolves(expectedSale);
       });
       
       after(() => {
         salesModel.getById.restore();
+        productsModel.filterByIds.restore();
+        productsModel.update.restore();
         salesModel.erase.restore();
       });
 
