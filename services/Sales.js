@@ -24,7 +24,7 @@ const validateSale = async (list) => {
     const newQuantity = quantity - soldQuantity;
     return { productId, quantity: newQuantity };
   });
-  return newStock.some((product) => product.quantity >= 0);
+  return !newStock.some((product) => product.quantity < 0);
 };
 
 const consolidateSale = async (list) => {
@@ -37,12 +37,10 @@ const consolidateSale = async (list) => {
 };
 
 const create = async (list) => {
-  list.forEach(async (item) => {
-    const product = await Products.getById(item.productId);
-    if (!product) {
-      return invalidIdOrQuantityError;
-    }
-  });
+  const stock = list.map(async (item) => Products.getById(item.productId));
+  const validStock = await Promise.all(stock);
+  const containsNull = validStock.includes(null);
+  if (containsNull) return invalidIdOrQuantityError;
   const validity = await validateSale(list);
   if (!validity) return notAllowedAmmountError;
   await consolidateSale(list);
