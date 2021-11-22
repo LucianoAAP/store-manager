@@ -9,9 +9,9 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use('/products', require('./controllers/Products'));
+app.use('/products', require('./routers/ProductsRouter'));
 
-app.use('/sales', require('./controllers/Sales'));
+app.use('/sales', require('./routers/SalesRouter'));
 
 app.use(errorMiddleware);
 

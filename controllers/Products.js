@@ -1,32 +1,28 @@
-const express = require('express');
-const rescue = require('express-rescue');
 const Products = require('../services/Products');
 const { validateProductsBody } = require('../utils/validations');
 
-const router = express.Router();
-
-router.get('/', rescue(async (_req, res) => {
+const getAll = async (_req, res) => {
   const products = await Products.getAll();
-  res.status(200).json({ products });
-}));
+  return res.status(200).json({ products });
+};
 
-router.get('/:id', rescue(async (req, res, next) => {
+const getById = async (req, res, next) => {
   const { id } = req.params;
   const product = await Products.getById(id);
   if (product.err) return next(product.err);
   return res.status(200).json(product);
-}));
+};
 
-router.post('/', rescue(async (req, res, next) => {
+const create = async (req, res, next) => {
   const { name, quantity } = req.body;
   const validation = validateProductsBody(name, quantity);
   if (validation.err) return next(validation.err);
   const product = await Products.create(name, quantity);
   if (product.err) return next(product.err);
   return res.status(201).json(product);
-}));
+};
 
-router.put('/:id', rescue(async (req, res, next) => {
+const update = async (req, res, next) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
   const validation = validateProductsBody(name, quantity);
@@ -34,13 +30,19 @@ router.put('/:id', rescue(async (req, res, next) => {
   const product = await Products.update(id, name, quantity);
   if (product.err) return next(product.err);
   return res.status(200).json(product);
-}));
+};
 
-router.delete('/:id', rescue(async (req, res, next) => {
+const erase = async (req, res, next) => {
   const { id } = req.params;
   const product = await Products.erase(id);
   if (product.err) return next(product.err);
   return res.status(200).json(product);
-}));
+};
 
-module.exports = router;
+module.exports = {
+  getAll,
+  getById,
+  create,
+  update,
+  erase,
+};
