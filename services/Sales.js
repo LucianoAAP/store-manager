@@ -33,11 +33,11 @@ const validateSale = async (stock, list) => {
 };
 
 const consolidateSale = async (stock, list) => {
-  const promises = list.forEach(async (product) => {
+  const promises = list.map(async (product) => {
     const { productId, quantity: soldQuantity } = product;
     const { name, quantity } = stock.find(({ id }) => id === productId);
     const newQuantity = quantity - soldQuantity;
-    await Products.update(productId, name, newQuantity);
+    return Products.update(productId, name, newQuantity);
   });
   Promise.all(promises);
 };
@@ -61,7 +61,7 @@ const validateUpdate = async (oldList, newList) => {
 };
 
 const consolidateUpdate = async (list) => {
-  const promises = list.forEach(async (product) => {
+  const promises = list.map(async (product) => {
     const { id, name, quantity } = product;
     await Products.update(id, name, quantity);
   });
