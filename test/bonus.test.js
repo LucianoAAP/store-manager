@@ -27,7 +27,7 @@ describe('11 - Escreva testes para seus models', () => {
   it('Será validado que cobertura total das linhas dos arquivos na pasta `models` é maior ou igual a 60%', async () => {
     const coverageResults = await readCoverageFile();
     expect(coverageResults.total.lines.pct).toBeGreaterThanOrEqual(60);
-    expect(coverageResults.total.lines.covered).toBeGreaterThanOrEqual(45);
+    expect(coverageResults.total.lines.covered).toBeGreaterThanOrEqual(24);
   });
 });
 
