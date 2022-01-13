@@ -4,9 +4,9 @@ const { MongoClient } = require('mongodb');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { ObjectId } = require('mongodb');
 
-const getConnection = require('../../models/connection');
-const productsModel = require('../../models/Products');
-const salesModel = require('../../models/Sales');
+const getConnection = require('../models/connection');
+const productsModel = require('../models/Products');
+const salesModel = require('../models/Sales');
 const PRODUCT_ID_EXAMPLE = '619729662c898d2a96e352d0';
 const SALE_ID_EXAMPLE = '619828487e99f5c893e40dcd';
 

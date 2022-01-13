@@ -4,9 +4,11 @@
   "description": "Simple CRUD to sales and products",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
-    "test:mocha": "nyc --all --include models --include services --include controllers mocha test/unit/*.js --exit",
-    "start": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "mocha ./tests/**/*$NAME*.{test,spec}.js --exit",
+    "test:coverage": "nyc --all npm test",
+    "test:coverage:json": "nyc --all --reporter=json-summary npm test",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
   },
   "repository": {

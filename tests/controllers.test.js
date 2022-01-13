@@ -1,11 +1,10 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-const productsService = require('../../services/Products');
-const salesService = require('../../services/Sales');
-const productsController = require('../../controllers/Products');
-const salesController = require('../../controllers/Sales');
-const { wrongIdError, productAlreadyExistsError } = require('../../utils/validations');
+const productsService = require('../services/Products');
+const salesService = require('../services/Sales');
+const productsController = require('../controllers/Products');
+const salesController = require('../controllers/Sales');
 const PRODUCT_ID_EXAMPLE = '619729662c898d2a96e352d0';
 const SALE_ID_EXAMPLE = '619828487e99f5c893e40dcd';
 
